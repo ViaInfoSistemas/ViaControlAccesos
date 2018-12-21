@@ -1,0 +1,23 @@
+<h1 mat-dialog-title>Registrar ingreso para el Socio {{D_SOCIO}}</h1>
+<div mat-dialog-content>
+  <p>Especifique el tipo de ingreso:</p>
+</div>
+<div style="text-align: center;">
+  <button mat-raised-button color="primary" (click)="Ingreso('C')">
+    <i class="material-icons" style="font-size: 0.8in">payment</i>
+    <br>
+    con carnet
+  </button>
+  &nbsp;
+  <button mat-raised-button color="warn" (click)="Ingreso('S')">
+    <i class="material-icons" style="font-size: 0.8in">tab_unselected</i>
+    <br>
+    sin carnet
+  </button>
+</div>
+
+<br>
+
+<div style="text-align: right;">
+  <button mat-stroked-button (click)="Close()">Cancelar</button>
+</div>

@@ -1,0 +1,17 @@
+<div style="text-align: center">
+    <h4>{{date | date: 'dd/MM/yyyy'}}</h4>
+    <h4>{{hour | date: 'HH:mm:ss'}}</h4>
+    
+    <h2>{{recurso}}</h2>
+  
+    <br>
+  
+    <input type="number" class="inputSocio" (keyup)="onKey($event)" >
+    
+    <br>
+    <br>
+  
+    <button mat-flat-button color="primary" (click)="BuscarSocio()">
+      <i class="material-icons">search</i> Buscar Socio
+    </button>
+  </div>

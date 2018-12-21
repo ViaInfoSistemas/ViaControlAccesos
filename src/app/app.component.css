@@ -1,0 +1,14 @@
+mat-card{
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  a {
+    color: white;
+    text-decoration: none;    
+  }
+
+  .material-icons {
+    font-size: 0.3in;
+    float: left;
+  }
