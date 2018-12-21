@@ -22,25 +22,38 @@ export class SociosComponent implements OnInit {
   Tipo_Busqueda: string;
   SociosData: SocioModel[];
   private personasData: Array<SocioModel>;
+  loading = false;
+  msgErr = '';
 
   displayedColumns: string[] = ['Numero', 'Nombre', 'TipoIngresoDesc', 'GrupoFamiliar', 'FechaNacimiento', 'NumeroDocumento', 'Estado'];
   dataSource = new MatTableDataSource<SocioModel>();
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  ngOnInit() { }
+  ngOnInit() { 
+    this.msgErr = '';
+  }
 
   buscar() {
     var TipoBusqueda = this.Tipo_Busqueda;
+    this.msgErr = '';
+    this.loading = true;
+
     this.PersonasService.getPersonas(this.N_SOCIO, this.D_SOCIO, this.N_GRUPO_FAMI, true, false, false, false).subscribe(
       p => this.onLoadPersonasResult(p)
-      //, err => console.log(err)
-    );
+      , err => this.onErrPersonasResult(err)
+    );    
   }
   onLoadPersonasResult(p) {
     this.personasData = JSON.parse(p);
     this.dataSource = new MatTableDataSource<SocioModel>(this.personasData);
     this.dataSource.paginator = this.paginator;
+
+    this.loading = false;
+  }  
+  onErrPersonasResult(e) {
+    this.msgErr = e;
+    this.loading = false;
   }  
 
   selectRow(row) {
