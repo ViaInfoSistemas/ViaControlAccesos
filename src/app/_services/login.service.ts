@@ -45,12 +45,5 @@ export class LoginService {
       token = 'ERR:' + e.message;
     }
     return token;
-
-    // try {
-    //   return this.http.get(endpoint 
-    //     + `Authenticate?username=${username}&password=${password}`);
-    // } catch (e) {
-    //   console.error(e);      
-    // }
   }
 }

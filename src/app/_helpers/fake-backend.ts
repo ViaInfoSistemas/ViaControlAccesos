@@ -11,13 +11,6 @@ export class FakeBackendInterceptor implements HttpInterceptor {
     constructor(private _LoginService: LoginService) { }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-                
-        const users: User[] = [
-            { id: 1, username: 'test', password: 'test' }
-        ];
-
-        const authHeader = request.headers.get('Authorization');
-        const isLoggedIn = authHeader && authHeader.startsWith('Bearer fake-jwt-token');
 
         // wrap in delayed observable to simulate server api call
         return of(null).pipe(mergeMap(() => {
@@ -37,12 +30,6 @@ export class FakeBackendInterceptor implements HttpInterceptor {
                     password: request.body.password,
                     token: log
                 });
-            }
-
-            // get all users
-            if (request.url.endsWith('/users') && request.method === 'GET') {
-                if (!isLoggedIn) return unauthorised();
-                return ok(users);
             }
 
             // pass through any requests not handled above

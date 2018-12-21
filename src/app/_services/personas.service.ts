@@ -12,12 +12,8 @@ export class PersonasService {
     constructor(private http: HttpClient) { }
 
     getPersonas(id: number, nombre: string, GrupoFamiliar: number, Socios: boolean, Empleados: boolean, IngEsp: boolean, TarAux: boolean) {
-        try {
-            return this.http.get(endpoint
-                + `FindByCriteria?id=${id}&Nombre=${nombre}&GrupoFamiliar=${GrupoFamiliar}&Socios=${Socios}&Empleados=${Empleados}&IngEsp=${IngEsp}&TarAux=${TarAux}`);
-        } catch (e) {
-            console.log(e);
-        }
+        return this.http.get(endpoint
+            + `FindByCriteria?id=${id}&Nombre=${nombre}&GrupoFamiliar=${GrupoFamiliar}&Socios=${Socios}&Empleados=${Empleados}&IngEsp=${IngEsp}&TarAux=${TarAux}`);
     }
 
     private handleError(error: Response | any) {

@@ -20,6 +20,7 @@ export class JwtInterceptor implements HttpInterceptor {
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         // add authorization header with jwt token if available
         let currentUser = this.authenticationService.currentUserValue;
+        // TODO: ¿Como chequeamos que el toquen no este desactualizado?
         if (currentUser && currentUser.token == 'fake-jwt-token') {
             var token = this.LoginService.autenticateUser(currentUser.username, currentUser.password);
             if(token.indexOf('ERR') != -1)
