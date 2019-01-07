@@ -1,9 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from './../../environments/environment';
 import { APIDataModel } from '../_model/interface'
-import { Observable, observable } from 'rxjs';
-//import { Stream } from 'stream';
+import { DOCUMENT } from '@angular/platform-browser';
 
 const endpoint = environment.apiUrl + '/tarjetas/';
 
@@ -13,10 +12,18 @@ const endpoint = environment.apiUrl + '/tarjetas/';
 
 export class TarjetasService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, @Inject(DOCUMENT) private document: any) { 
+    this.domain = this.document.location.hostname;
+  }
 
   dataJson: APIDataModel;
+  domain:any;
 
+  // ngOnInit() {
+  //   this.domain = this.document.location.hostname;
+  //   this.hostname = this.domain;
+  // }
+  
   // validarTarjeta(PuestoControlID: number, RecursoID: number, usuario: string, tarjeta: number): Observable<any>{
   //   return this.sendValidar(PuestoControlID, RecursoID, usuario, tarjeta).subscribe(
   //     data => this.onLoadValidar(data)
@@ -38,6 +45,6 @@ export class TarjetasService {
 
   sendRegistrar(tarjeta: number, test: boolean, sinCarnet: boolean, computerName: string){
     return this.http.get<object>(endpoint + `RegistrarIngreso?tarjeta=${tarjeta}&test=${test}
-      &sinCarnet=${sinCarnet}&computerName=${computerName}`);
+      &sinCarnet=${sinCarnet}&computerName=${this.domain}`);
   }
 }
