@@ -6,7 +6,7 @@
             "type": "chrome",
             "request": "attach",
             "port": 9222,
-            "url": "http://localhost:4200/home",
+            "url": "http://localhost:4200/login?returnUrl=%2Fhome",
             "webRoot": "${workspaceFolder}"
         }
     ]

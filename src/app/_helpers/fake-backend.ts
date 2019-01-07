@@ -3,7 +3,6 @@ import { HttpRequest, HttpResponse, HttpHandler, HttpEvent, HttpInterceptor, HTT
 import { Observable, of, throwError } from 'rxjs';
 import { delay, mergeMap, materialize, dematerialize } from 'rxjs/operators';
 import { LoginService } from '../_services/login.service'
-import { User } from '../_model/user';
 
 @Injectable()
 export class FakeBackendInterceptor implements HttpInterceptor {
@@ -11,15 +10,21 @@ export class FakeBackendInterceptor implements HttpInterceptor {
     constructor(private _LoginService: LoginService) { }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+                
+        const authHeader = request.headers.get('Authorization');
+        //const isLoggedIn = authHeader && authHeader.startsWith('Bearer fake-jwt-token');
 
         // wrap in delayed observable to simulate server api call
         return of(null).pipe(mergeMap(() => {
 
             // authenticate - public
             if (request.url.endsWith('/users/authenticate') && request.method === 'POST') {
+                this._LoginService.getEcho();
+                
                 // Login de usuario
-                var log = this._LoginService.autenticateUser(request.body.username, request.body.password);
-                if(log.indexOf('ERR') != -1) return error('Username or password is incorrect');
+                var log = this._LoginService.autenticateUser(request.body.username, request.body.password, request.body.recursoID);
+                if(log.indexOf('ERR') != -1) 
+                    return error(log.substring(log.indexOf('ERR') + 3));
 
                 // const user = users.find(x => x.username === request.body.username && x.password === request.body.password);
                 // if (!user) return error('Username or password is incorrect');
@@ -28,9 +33,17 @@ export class FakeBackendInterceptor implements HttpInterceptor {
                     //id: user.id,
                     username: request.body.username,
                     password: request.body.password,
-                    token: log
+                    token: log,
+                    recurso: request.body.recurso,
+                    recursoID: request.body.recursoID
                 });
             }
+
+            // // get all users
+            // if (request.url.endsWith('/users') && request.method === 'GET') {
+            //     if (!isLoggedIn) return unauthorised();
+            //     return ok(users);
+            // }
 
             // pass through any requests not handled above
             return next.handle(request);

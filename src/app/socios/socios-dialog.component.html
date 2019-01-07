@@ -3,21 +3,24 @@
   <p>Especifique el tipo de ingreso:</p>
 </div>
 <div style="text-align: center;">
-  <button mat-raised-button color="primary" (click)="Ingreso('C')">
+  <button mat-raised-button color="primary" (click)="Ingreso('C')" [disabled]="loading">
     <i class="material-icons" style="font-size: 0.8in">payment</i>
     <br>
     con carnet
   </button>
   &nbsp;
-  <button mat-raised-button color="warn" (click)="Ingreso('S')">
+  <button mat-raised-button color="warn" (click)="Ingreso('S')" [disabled]="loading">
     <i class="material-icons" style="font-size: 0.8in">tab_unselected</i>
     <br>
     sin carnet
   </button>
 </div>
 
-<br>
+<div style="text-align: center">
+  <mat-spinner style="margin:0 auto;" mode="indeterminate" [diameter]="30" *ngIf="loading"></mat-spinner>  
+  <mat-error>&nbsp;{{msg}}</mat-error>
+</div>
 
 <div style="text-align: right;">
-  <button mat-stroked-button (click)="Close()">Cancelar</button>
+  <button mat-stroked-button (click)="Close()" [disabled]="loading">Cancelar</button>
 </div>

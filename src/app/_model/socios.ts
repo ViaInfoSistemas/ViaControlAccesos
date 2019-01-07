@@ -7,17 +7,9 @@ export class SocioModel {
     public GrupoFamiliar: number,
     public FechaNacimiento: string,
     public NumeroDocumento: number,
-    public Estado: string
+    public Estado: string,
+    public Tarjeta: number,
+    public TarjetaEstado: number,
+    public ImgB64: string,
   ){}
-
 }
-
-// export interface SocioModel {
-//     D_SOCIO: string;
-//     N_SOCIO: number;
-//     D_TIPO: string;
-//     N_GRUPO_FAMI: number;
-//     F_NACI: string;
-//     N_DOC: number;
-//     D_ESTA: string;
-//   }

@@ -2,16 +2,20 @@
     <h4>{{date | date: 'dd/MM/yyyy'}}</h4>
     <h4>{{hour | date: 'HH:mm:ss'}}</h4>
     
-    <h2>{{recurso}}</h2>
-  
+    <h2>{{recurso | uppercase }}</h2>
+ 
     <br>
   
-    <input type="number" class="inputSocio" (keyup)="onKey($event)" >
-    
+    <input type="number" class="inputSocio" (keyup)="onKey($event)" #inputSocio [disabled]="loading">
     <br>
+    <br>
+    <mat-spinner style="margin:0 auto;" mode="indeterminate" [diameter]="30" *ngIf="loading"></mat-spinner>
+    <mat-error>&nbsp;{{error}}</mat-error>
+    <span class="msg" >&nbsp;{{controlMsg}}</span>
+    <br>    
     <br>
   
-    <button mat-flat-button color="primary" (click)="BuscarSocio()">
+    <button mat-flat-button color="primary" (click)="BuscarSocio()" [disabled]="loading">
       <i class="material-icons">search</i> Buscar Socio
     </button>
   </div>

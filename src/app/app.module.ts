@@ -22,6 +22,8 @@ import { fakeBackendProvider } from './_helpers';
 import { SociosService } from './_services/socios.service';
 import { PersonasService  } from './_services/personas.service';
 import { ErrorComponent } from './error/error.component';
+import { RecursosService } from './_services/recursos.service';
+import { TarjetasService } from './_services/tarjetas.service'
 
 // Material https://material.angular.io/guide/getting-started 
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -74,9 +76,7 @@ import {MatAutocompleteModule, MatBadgeModule, MatBottomSheetModule, MatButtonMo
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     //{ provide: ErrorHandler, useClass: ErrorsHandler },
 
-    // provider used to create fake backend
-    SociosService, PersonasService,
-    fakeBackendProvider
+    SociosService, PersonasService, fakeBackendProvider, RecursosService, TarjetasService
 ],
   bootstrap: [AppComponent]
 }) export class AppModule { }

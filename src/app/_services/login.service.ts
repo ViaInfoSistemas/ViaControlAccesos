@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { environment } from './../../environments/environment';
 
-const endpoint = 'http://localhost:15000/api/login/';
+const endpoint = environment.apiUrl + '/login/';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,7 @@ export class LoginService {
   getEcho() {
     try {
       var req = new XMLHttpRequest();
-      req.open('GET', 'http://localhost:15000/api/login/EchoPing/', false);
+      req.open('GET', endpoint + 'EchoPing/', false);
       req.send();
       if (req.status == 200 && req.responseText != "true")
         alert(req.responseText);
@@ -25,25 +26,33 @@ export class LoginService {
       this.router.navigate(['error', { msg: 'No se pudo establecer coneción con la API', code: e.code, name: e.name }]);
     }
   }
-  autenticateUser(username: string, password: string) {
+  autenticateUser(username: string, password: string, RecursoID: number) {
     var token = '';
     try {
       var req = new XMLHttpRequest();
       req.open('POST', endpoint + `Authenticate?username`, false);
 
       req.setRequestHeader("Content-Type", "application/json");
-      req.send(JSON.stringify({ Username: username, Password: password }));
+      req.send(JSON.stringify({ Username: username, Password: password, RecursoID: RecursoID }));
 
       if (req.status == 200 && req.responseText != "true") {
         token = req.responseText;
         // Quita comillas dobles
         token = token.replace("\"", "").replace("\"", "");
       } else {
-        token = "ERR:" + req.status
+        var msjJSon = JSON.parse(req.responseText);
+        token = "ERR:" + msjJSon.Message
       }
     } catch (e) {
       token = 'ERR:' + e.message;
     }
     return token;
+
+    // try {
+    //   return this.http.get(endpoint 
+    //     + `Authenticate?username=${username}&password=${password}`);
+    // } catch (e) {
+    //   console.error(e);      
+    // }
   }
 }

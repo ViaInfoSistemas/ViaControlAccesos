@@ -1,6 +1,6 @@
 <div class="form-container">
   <mat-form-field>
-    <input type="text" matInput placeholder="Nombre" [(ngModel)]="D_SOCIO">
+    <input type="text" #inputNombre matInput placeholder="Nombre" [(ngModel)]="D_SOCIO" (keyup)="onKey($event)">
   </mat-form-field>
 </div>
 <mat-form-field>
@@ -14,18 +14,18 @@
 
 <mat-radio-group style="padding-top: 10px">
   <b>Buscar</b> &nbsp;
-  <mat-radio-button value="T">Todo</mat-radio-button> &nbsp;
-  <mat-radio-button value="E">Solo Empleados</mat-radio-button> &nbsp;
-  <mat-radio-button value="S">Solo Socios</mat-radio-button> &nbsp;
-  <mat-radio-button value="O">Solo Otros</mat-radio-button>
+  <mat-radio-group class="example-radio-group" [(ngModel)]="tipoBusquedaSelected">
+    <mat-radio-button class="example-radio-button" *ngFor="let tiposBusqued of tiposBusqueda" [value]="tiposBusqued">
+      {{tiposBusqued}} &nbsp;
+    </mat-radio-button>
+  </mat-radio-group>
 </mat-radio-group>
 
-<div class="example-button-row" style="padding-top: 10px">
-  <button [disabled]="loading" mat-raised-button color="primary" (click)="buscar()">Buscar</button>
-  <img *ngIf="loading" class="pl-2" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />  
-  <mat-error *ngIf="msgErr.length > 0">
-    {{formSubmitError}}
-</mat-error>
+<div style="padding-top: 10px; padding-bottom: 5px">
+  <button mat-raised-button color="primary" (click)="buscar()" [disabled]="loading" style="float:left">Buscar</button>  
+  &nbsp;
+  <mat-spinner style="float: left" [diameter]="30" *ngIf="loading"></mat-spinner>  
+  <mat-error>&nbsp;{{msgBusqueda}}</mat-error>
 </div>
 
 <br>
