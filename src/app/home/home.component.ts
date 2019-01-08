@@ -58,23 +58,6 @@ export class HomeComponent implements OnInit {
           p => this.onLoadSocio(p)
           , err => this.onLoadErrorSocio(err)
         );
-        // if (String(event.target.value).length <= 6) {
-        //   // Busca el socio por numero
-        //   this.sociosService.getSocio(event.target.value).subscribe(
-        //     p => this.onLoadSocio(p)
-        //     , err => this.onLoadErrorSocio(err)
-        //   );
-        // }
-        // else {
-        //   // Busca el socio por tarjeta
-        //   this.sociosService.getSocioByTarjeta(event.target.value).subscribe(
-        //     p => this.onLoadSocio(p)
-        //     , err => this.onLoadErrorSocio(err)
-        //   );
-
-        //   this.router.navigate(['acceso', { Msj: "Socio Inhabilitado", C_ACCE: 1, Recurso: "RECURSO SELECCIONADO"
-        //     , N_SOCIO: event.target.value }]);
-        // }
       }
     }
   }
@@ -98,7 +81,7 @@ export class HomeComponent implements OnInit {
 
           // Registra ingreso
           this.controlMsg = 'Registrando ingreso';
-          this.tarjetasService.sendRegistrar(this.SocioData.Tarjeta, false, false, 'TEST').subscribe(
+          this.tarjetasService.sendRegistrar(this.SocioData.Tarjeta, false, false).subscribe(
             (data: object) => {
               let JSData = JSON.parse(data.toString());
               
@@ -113,18 +96,13 @@ export class HomeComponent implements OnInit {
                 , N_SOCIO: this.SocioData.Numero, D_SOCIO: this.SocioData.Nombre
               }]);
             });
-
-          // this.loading = false;
-          // this.router.navigate(['acceso', {
-          //   Msj: msg, C_ACCE: acceso, Recurso: this.recurso
-          //   , N_SOCIO: this.SocioData.Numero, D_SOCIO: this.SocioData.Nombre
-          // }]);
         });
     }
     else {
       this.error = this.APIData.ErrMessage;
       this.loading = false;
       this.controlMsg = '';
+      this.inputSocio.nativeElement.focus();
     }
   }
   onLoadErrorSocio(error) {

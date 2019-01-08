@@ -31,7 +31,7 @@ export class SociosDialog implements OnInit {
 
     Ingreso(data) {        
         this.sociosService.getSocio(this.N_SOCIO).subscribe(
-            p => this.onLoadSocio(p, data.tipoIngreso)
+            p => this.onLoadSocio(p, data)
             , err => this.onLoadErrorSocio(err)
           );
     }
@@ -58,7 +58,12 @@ export class SociosDialog implements OnInit {
     
               // Registra ingreso
               this.msg = 'Registrando ingreso';
-              this.tarjetasService.sendRegistrar(this.SocioData.Tarjeta, false, false, 'TEST').subscribe(
+
+              let SinTarjeta:boolean = false;
+              if(tipoIngreso == 'S')
+                SinTarjeta = true;
+
+                this.tarjetasService.sendRegistrar(this.SocioData.Tarjeta, false, SinTarjeta).subscribe(
                 (data: object) => {
                   let JSData = JSON.parse(data.toString());
     

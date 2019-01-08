@@ -50,9 +50,9 @@ export class AccesoComponent implements OnInit {
       this.iconColor = 'white';
     }
 
-    // Espera 5 segundos
+    // Espera 4 segundos
     (async () => {
-      await delay(3000);
+      await delay(4000);
       this.router.navigate(['home']);
     })();
   }

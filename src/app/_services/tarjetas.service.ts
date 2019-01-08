@@ -43,7 +43,7 @@ export class TarjetasService {
       &usuario=${usuario}&tarjeta=${tarjeta}`);
   }
 
-  sendRegistrar(tarjeta: number, test: boolean, sinCarnet: boolean, computerName: string){
+  sendRegistrar(tarjeta: number, test: boolean, sinCarnet: boolean){
     return this.http.get<object>(endpoint + `RegistrarIngreso?tarjeta=${tarjeta}&test=${test}
       &sinCarnet=${sinCarnet}&computerName=${this.domain}`);
   }
