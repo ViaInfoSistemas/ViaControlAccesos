@@ -7,15 +7,11 @@ const endpoint = environment.apiUrl + '/recursos/';
 @Injectable({
   providedIn: 'root'
 })
-export class RecursosService {
+export class PuestoscontrolService {
 
   constructor(private http: HttpClient) { }
 
-  getRecursos() {
+  getPuestosControl() {
     return this.http.get(endpoint + `GET`);
-  }
-
-  getRecursosPorPuesto(PuestoControlID: number) {
-    return this.http.get(endpoint + `GET&PuestoControlID=${PuestoControlID}`);
   }
 }

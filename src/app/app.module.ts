@@ -24,6 +24,7 @@ import { PersonasService  } from './_services/personas.service';
 import { ErrorComponent } from './error/error.component';
 import { RecursosService } from './_services/recursos.service';
 import { TarjetasService } from './_services/tarjetas.service'
+import { PuestoscontrolService } from './_services/puestoscontrol.service'
 
 // Material https://material.angular.io/guide/getting-started 
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -76,7 +77,7 @@ import {MatAutocompleteModule, MatBadgeModule, MatBottomSheetModule, MatButtonMo
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     //{ provide: ErrorHandler, useClass: ErrorsHandler },
 
-    SociosService, PersonasService, fakeBackendProvider, RecursosService, TarjetasService
+    SociosService, PersonasService, fakeBackendProvider, RecursosService, TarjetasService, PuestoscontrolService
 ],
   bootstrap: [AppComponent]
 }) export class AppModule { }

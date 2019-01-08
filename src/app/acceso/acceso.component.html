@@ -1,23 +1,21 @@
-<div [style.background-color]="backColor" style="text-align: center; padding: 20px 0 20px 0; ">
-  <h4>{{date | date: 'dd/MM/yyyy'}}</h4>
-  <h4>{{hour | date: 'HH:mm:ss'}}</h4>
-
-  <h2>{{recurso}}</h2>
-
+<div class="backgrd">
   <div class="infoSocio">
-    <img class="socio-image" [src]="ImgSocio">    
+    <div class="infoData">
+      <h4>{{date | date: 'dd/MM/yyyy'}} {{hour | date: 'HH:mm:ss'}}</h4>
+      <h2>{{recurso}}</h2>
+    </div>
+
+    <img class="socio-image" [src]="ImgSocio">
 
     <h2>{{socio}}</h2>
-    <h2>{{n_socio}}</h2>
-  </div>
+    <h2>({{n_socio}})</h2>
 
-  <br>
-
-  <div class="infoAcceso">
-    <i class="material-icons" style="font-size: 0.8in;" [style.color]="iconColor">
-      {{icon}}
-    </i>
-
-    <h2 [style.color]="iconColor">{{descripcion}}</h2>
+    <div class="infoAcceso" [style.background-color]="backColor">
+      <i class="material-icons" style="font-size: 0.8in" [style.color]="iconColor">
+        {{icon}}
+      </i>
+      <br>
+      <span [style.color]="iconColor">{{descripcion}}</span>
+    </div>
   </div>
 </div>

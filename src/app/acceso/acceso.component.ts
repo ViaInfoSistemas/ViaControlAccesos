@@ -40,14 +40,14 @@ export class AccesoComponent implements OnInit {
 
     this.SociosServices.getFoto(N_SOCIO).subscribe(data => {
       let JSData = JSON.parse(data.toString());
-      if(JSData != null && JSData.Status == 'OK')
+      if(JSData != null && JSData.Status == 'OK' && JSData.Data != null && JSData.Data != '')
         this.ImgSocio = 'data:image/gif;base64,' + JSData.Data;
     });
 
     if (C_ACCE == "1") {
       this.backColor = '#CD6155';
       this.icon = 'cancel';
-      this.iconColor = 'red';
+      this.iconColor = 'white';
     }
 
     // Espera 5 segundos
