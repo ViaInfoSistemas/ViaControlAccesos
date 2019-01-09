@@ -45,9 +45,10 @@ import {MatAutocompleteModule, MatBadgeModule, MatBottomSheetModule, MatButtonMo
   MatRippleModule, MatSelectModule, MatSidenavModule, MatSliderModule, MatSlideToggleModule, MatSnackBarModule, MatSortModule,
   MatStepperModule, MatTableModule, MatTooltipModule, MatTreeModule,
 } from '@angular/material';
+import { FooterComponent } from './footer/footer.component';
 
 @NgModule({
-  declarations: [ AppComponent, HomeComponent, SociosComponent, AccesoComponent, SociosDialog, LoginComponent, ErrorComponent ],
+  declarations: [ AppComponent, HomeComponent, SociosComponent, AccesoComponent, SociosDialog, LoginComponent, ErrorComponent, FooterComponent ],
   entryComponents: [ SociosDialog ],
   imports: [
     NoopAnimationsModule, BrowserAnimationsModule, CdkTableModule, CdkTreeModule, DragDropModule, MatAutocompleteModule,

@@ -3,6 +3,7 @@ import { MatPaginator, MatTableDataSource } from '@angular/material';
 import { ViewChild } from '@angular/core'
 import { AuthenticationService } from '../_services/authentication.service'
 import { MatDialog, MatDialogConfig } from '@angular/material';
+
 import { SociosDialog } from './socios-dialog-component';
 import { SocioModel } from '../_model/socios';
 import { PersonasService } from '../_services/personas.service'
@@ -122,5 +123,15 @@ export class SociosComponent implements OnInit {
     dialogRef.afterClosed().subscribe(
       data => this.dialog.closeAll()
     );
+  }
+
+  toDate(date) {
+    let dateN = parseInt(date.substr(6));
+    const today = new Date(dateN);
+    const day = today.getDate();
+    const month = today.getMonth()+1;
+    const year = today.getFullYear();
+ 
+    return `${(day<10 ? ("0" + day) : day)}/${(month<10 ? ("0" + month) : month)}/${year}`;    
   }
 }
