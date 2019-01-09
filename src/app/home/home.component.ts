@@ -1,5 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
+
+import { CommonService } from '../_services/common.service'
+import { AppComponent } from '../app.component'
 import { LoginService } from '../_services/login.service';
 import { AuthenticationService } from '../_services/authentication.service'
 import { SociosService } from '../_services/socios.service'
@@ -22,12 +25,14 @@ export class HomeComponent implements OnInit {
   APIData: APIDataModel;
   SocioData: SocioModel;
   loading = false;
-  user;
+  user;  
   
   constructor(private router: Router, public rest: LoginService, private authenticationService: AuthenticationService
-    , private sociosService: SociosService, private tarjetasService: TarjetasService) {
+    , private sociosService: SociosService, private tarjetasService: TarjetasService, private appComponent: AppComponent
+    , private commonService: CommonService) {
     this.user = authenticationService.currentUserValue;
     this.recurso = `[${this.user.recurso}]`;
+    appComponent.updateTestMode();
   }
 
   @ViewChild("inputSocio") inputSocio: ElementRef;
@@ -48,6 +53,12 @@ export class HomeComponent implements OnInit {
     this.controlMsg = '';
     var keyCode = event.which || event.keyCode;
     if (keyCode === 13) {
+      if (event.target.value == "0000000000") {
+        this.changeTestMode();
+        this.inputSocio.nativeElement.value = '';
+        return;
+      }
+
       if (event.target.value == undefined || event.target.value == "") {
         // Abre búsqueda de socios
         this.router.navigate(['socios']);
@@ -81,7 +92,7 @@ export class HomeComponent implements OnInit {
 
           // Registra ingreso
           this.controlMsg = 'Registrando ingreso';
-          this.tarjetasService.sendRegistrar(this.SocioData.Tarjeta, false, false).subscribe(
+          this.tarjetasService.sendRegistrar(this.SocioData.Tarjeta, false).subscribe(
             (data: object) => {
               let JSData = JSON.parse(data.toString());
               
@@ -112,6 +123,17 @@ export class HomeComponent implements OnInit {
 
   BuscarSocio() {
     this.router.navigate(['socios']);
+  }
+
+  changeTestMode() {
+    let testMode = this.commonService.SSTestMode_Get();
+
+    if(testMode == true)
+      this.commonService.SSTestMode_Set('false');
+    else
+      this.commonService.SSTestMode_Set('true');
+
+    this.appComponent.updateTestMode();
   }
 
 }

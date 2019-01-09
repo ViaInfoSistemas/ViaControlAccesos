@@ -12,3 +12,17 @@ mat-card{
     font-size: 0.3in;
     float: left;
   }
+
+  .bar-icon {
+    padding: 0 14px;
+  }
+  
+  .bar-spacer {
+    flex: 1 1 auto;
+  }
+
+  .InfoTest {
+    color: yellow;
+    border: 3px solid yellow;
+    padding-right: 14px;
+  }

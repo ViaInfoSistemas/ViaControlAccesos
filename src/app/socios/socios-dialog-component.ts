@@ -63,7 +63,7 @@ export class SociosDialog implements OnInit {
               if(tipoIngreso == 'S')
                 SinTarjeta = true;
 
-                this.tarjetasService.sendRegistrar(this.SocioData.Tarjeta, false, SinTarjeta).subscribe(
+                this.tarjetasService.sendRegistrar(this.SocioData.Tarjeta, SinTarjeta).subscribe(
                 (data: object) => {
                   let JSData = JSON.parse(data.toString());
     

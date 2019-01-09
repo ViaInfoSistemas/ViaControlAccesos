@@ -4,6 +4,7 @@ import { ViewChild } from '@angular/core'
 import { AuthenticationService } from '../_services/authentication.service'
 import { MatDialog, MatDialogConfig } from '@angular/material';
 
+import { AppComponent } from '../app.component'
 import { SociosDialog } from './socios-dialog-component';
 import { SocioModel } from '../_model/socios';
 import { PersonasService } from '../_services/personas.service'
@@ -16,9 +17,11 @@ import { APIDataModel } from '../_model/interface'
 })
 
 export class SociosComponent implements OnInit {
-  constructor(public dialog: MatDialog, private PersonasService: PersonasService, private authenticationService: AuthenticationService) {
+  constructor(public dialog: MatDialog, private PersonasService: PersonasService, private authenticationService: AuthenticationService
+    , private appComponent: AppComponent) {
     this.user = authenticationService.currentUserValue;
     this.recurso = `[${this.user.recurso}]`;
+    appComponent.updateTestMode();
   }
 
   @ViewChild("inputNombre") inputNombre: ElementRef;

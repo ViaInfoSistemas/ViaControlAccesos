@@ -1,10 +1,16 @@
 <!--The content below is only a placeholder and can be replaced.-->
 
-<mat-toolbar color="primary">
-  <a routerLink="/home"><i class="material-icons">home</i> Club Náutico San Isídro</a>
+<mat-toolbar color="primary">  
+  <mat-toolbar-row>
+    <a routerLink="/home"><i class="material-icons">home</i> Club Náutico San Isídro</a>  
+    <span class="bar-spacer"></span>
+    <span *ngIf="testMode" class="InfoTest"><mat-icon class="bar-icon">warning</mat-icon> MODO TEST</span>    
+  </mat-toolbar-row>
 </mat-toolbar>
+
 <mat-card>
   <!-- <app-home></app-home> -->
   <router-outlet></router-outlet>
 </mat-card>
+
 <app-footer></app-footer>
