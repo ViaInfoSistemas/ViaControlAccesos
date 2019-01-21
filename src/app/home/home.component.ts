@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
+import {MatSnackBar} from '@angular/material';
 
 import { CommonService } from '../_services/common.service'
 import { AppComponent } from '../app.component'
@@ -9,6 +10,7 @@ import { SociosService } from '../_services/socios.service'
 import { TarjetasService } from '../_services/tarjetas.service'
 import { APIDataModel } from '../_model/interface'
 import { SocioModel } from '../_model/socios'
+import { User } from '../_model/user'
 
 @Component({
   selector: 'home',
@@ -17,7 +19,6 @@ import { SocioModel } from '../_model/socios'
 })
 
 export class HomeComponent implements OnInit {
-  recurso: string = '';
   date = new Date();
   hour = new Date();
   error: string = '';
@@ -25,13 +26,12 @@ export class HomeComponent implements OnInit {
   APIData: APIDataModel;
   SocioData: SocioModel;
   loading = false;
-  user;  
+  user: User;
   
   constructor(private router: Router, public rest: LoginService, private authenticationService: AuthenticationService
     , private sociosService: SociosService, private tarjetasService: TarjetasService, private appComponent: AppComponent
-    , private commonService: CommonService) {
+    , private commonService: CommonService, public snackBar: MatSnackBar) {
     this.user = authenticationService.currentUserValue;
-    this.recurso = `[${this.user.recurso}]`;
     appComponent.updateTestMode();
   }
 
@@ -63,6 +63,11 @@ export class HomeComponent implements OnInit {
         // Abre búsqueda de socios
         this.router.navigate(['socios']);
       } else {
+        if(this.user.recursoID == undefined || this.user.recursoID == null) {
+          this.error = 'Falta informar Recurso';
+          return;
+        }
+
         this.loading = true;
         this.controlMsg = 'Validando datos';
         this.sociosService.getSocio(event.target.value).subscribe(
@@ -103,8 +108,7 @@ export class HomeComponent implements OnInit {
     
               this.loading = false;
               this.router.navigate(['acceso', {
-                Msj: msg, C_ACCE: acceso, Recurso: this.recurso
-                , N_SOCIO: this.SocioData.Numero, D_SOCIO: this.SocioData.Nombre
+                Msj: msg, C_ACCE: acceso, N_SOCIO: this.SocioData.Numero, D_SOCIO: this.SocioData.Nombre
               }]);
             });
         });
@@ -133,6 +137,9 @@ export class HomeComponent implements OnInit {
     else
       this.commonService.SSTestMode_Set('true');
 
+    this.snackBar.open(`Se ${testMode ? 'desactivo' : 'activo'} el modo TEST`, 'Modo TEST', {
+       duration: 3000,
+    });
     this.appComponent.updateTestMode();
   }
 

@@ -10,7 +10,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
     constructor(private _LoginService: LoginService) { }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-                
+
         const authHeader = request.headers.get('Authorization');
         //const isLoggedIn = authHeader && authHeader.startsWith('Bearer fake-jwt-token');
 
@@ -20,10 +20,10 @@ export class FakeBackendInterceptor implements HttpInterceptor {
             // authenticate - public
             if (request.url.endsWith('/users/authenticate') && request.method === 'POST') {
                 this._LoginService.getEcho();
-                
+
                 // Login de usuario
-                var log = this._LoginService.autenticateUser(request.body.username, request.body.password, request.body.recursoID);
-                if(log.indexOf('ERR') != -1) 
+                var log = this._LoginService.autenticateUser(request.body.username, request.body.password, request.body.PuestoControlID);
+                if (log.indexOf('ERR') != -1)
                     return error(log.substring(log.indexOf('ERR') + 3));
 
                 // const user = users.find(x => x.username === request.body.username && x.password === request.body.password);
@@ -34,8 +34,8 @@ export class FakeBackendInterceptor implements HttpInterceptor {
                     username: request.body.username,
                     password: request.body.password,
                     token: log,
-                    recurso: request.body.recurso,
-                    recursoID: request.body.recursoID
+                    PuestoContro: request.body.PuestoContro,
+                    PuestoControlID: request.body.PuestoControlID
                 });
             }
 

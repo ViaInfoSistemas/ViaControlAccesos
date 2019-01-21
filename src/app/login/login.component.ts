@@ -4,8 +4,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
 import { AuthenticationService } from '../_services/authentication.service';
-import { RecursosService } from '../_services/recursos.service';
-import { RecursosModel } from '../_model/recursos'
+import { PuestoscontrolService } from '../_services/puestoscontrol.service';
+import { PuestoControlModel } from '../_model/puestoControl'
 import { LoginService } from '../_services/login.service';
 import { APIDataModel } from '../_model/interface'
 
@@ -21,8 +21,7 @@ export class LoginComponent implements OnInit {
   returnUrl: string; recursos: string; username: string; password: string;
   error = '';
   hide = true;
-  private recursosData: Array<RecursosModel>;
-  private recursoSelected: RecursosModel;
+  puestoControlData: Array<PuestoControlModel>;
   private APIData: APIDataModel;
 
   constructor(
@@ -30,7 +29,7 @@ export class LoginComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private authenticationService: AuthenticationService,
-    private recursosService: RecursosService,
+    private puestoscontrolService: PuestoscontrolService,
     public rest: LoginService
   ) { }
 
@@ -46,8 +45,8 @@ export class LoginComponent implements OnInit {
     this.authenticationService.logout();
 
     // Obtiene los recursos disponibles
-    this.recursosService.getRecursos().subscribe(
-      p => this.onLoadRecursos(p)
+    this.puestoscontrolService.getPuestosControl().subscribe(
+      p => this.onLoadPuestos(p)
       , err => console.log(err)
     );
 
@@ -55,7 +54,7 @@ export class LoginComponent implements OnInit {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
   }
 
-  onLoadRecursos(data) {
+  onLoadPuestos(data) {
     this.APIData = JSON.parse(data);
 
     if (this.APIData.Status == "Error") {
@@ -63,13 +62,10 @@ export class LoginComponent implements OnInit {
       return;
     }
 
-    this.recursosData = JSON.parse(this.APIData.Data);
+    this.puestoControlData = JSON.parse(this.APIData.Data);
   }
-  RecursoSelected(data) {
-    this.recursoSelected = data;
-  }
-
-  onSubmit() {
+  
+  onSubmit(data: PuestoControlModel) {
     if (this.username == undefined || this.username == '') {
       this.error = 'Debe ingresar el nombre de usuario';
       return;
@@ -78,13 +74,9 @@ export class LoginComponent implements OnInit {
       this.error = 'Debe ingresar la contraseña';
       return;
     }
-    if (this.recursoSelected == undefined) {
-      this.error = 'Debe seleccionar un recurso';
-      return;
-    }
-
+    
     this.loading = true;
-    this.authenticationService.login(this.username, this.password, this.recursoSelected.Descripcion, this.recursoSelected.RecursoID)
+    this.authenticationService.login(this.username, this.password, data.Descripcion, data.PuestoControlID)
       .pipe(first())
       .subscribe(
         data => {

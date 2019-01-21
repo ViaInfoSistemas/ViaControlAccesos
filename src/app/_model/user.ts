@@ -5,4 +5,9 @@ export class User {
     recurso: string;
     recursoID: number;
     token?: string;
+    tokenDateGenerationClient?: Date
+    tokenDateGenerationServer?: Date
+    tokenDateExpirationServer?: Date
+    PuestoControlID: number;
+    PuestoContro: string;
 }

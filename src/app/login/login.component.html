@@ -8,17 +8,19 @@
     <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
 </mat-form-field>
 
-<div>
+<!-- <div>
     <span style="color: #3F51B5; padding: 0 0 30px 5px">Recurso {{recursoSelected != null ? ' (Seleccionado: ' + recursoSelected.Descripcion + ')' : ''}}</span>
     <mat-chip-list>
         <mat-chip *ngFor="let recurso of recursosData" selected [color]="undefined" (click)="RecursoSelected(recurso)">
             {{recurso.Descripcion}}
         </mat-chip>
     </mat-chip-list>    
-</div>
+</div> -->
+
 <br>
 <mat-error>&nbsp;{{error}}</mat-error>
 <div style="padding-bottom: 40px">
-    <button mat-raised-button style="float: left" color="primary" (click)="onSubmit()" [disabled]="loading">Iniciar sesión</button>    
+    <!-- <button mat-raised-button style="float: left" color="primary" (click)="onSubmit()" [disabled]="loading">Iniciar sesión</button> -->   
+    <button *ngFor="let puesto of puestoControlData" mat-raised-button style="float: left" color="primary" (click)="onSubmit(puesto)" [disabled]="loading">{{puesto.Descripcion}}</button>
     <mat-spinner style="float: left" [diameter]="30" *ngIf="loading"></mat-spinner>
 </div>

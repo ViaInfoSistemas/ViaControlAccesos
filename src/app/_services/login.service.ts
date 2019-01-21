@@ -10,30 +10,29 @@ const endpoint = environment.apiUrl + '/login/';
 })
 export class LoginService {
 
-  constructor(
-    private http: HttpClient,
-    private router: Router) { }
+  constructor(private http: HttpClient, private router: Router) { }
 
   // Get data
   getEcho() {
     try {
       var req = new XMLHttpRequest();
-      req.open('GET', endpoint + 'EchoPing/', false);
+      req.open('GET', endpoint + 'EchoPing', false);
       req.send();
-      if (req.status == 200 && req.responseText != "true")
+      if (req.status == 200 && req.responseText.replace(/['"]+/g, '') != "true")
         alert(req.responseText);
     } catch (e) {
       this.router.navigate(['error', { msg: 'No se pudo establecer coneción con la API', code: e.code, name: e.name }]);
     }
   }
-  autenticateUser(username: string, password: string, RecursoID: number) {
+
+  autenticateUser(username: string, password: string, PuestoControlID: number) {
     var token = '';
     try {
       var req = new XMLHttpRequest();
-      req.open('POST', endpoint + `Authenticate?username`, false);
+      req.open('POST', endpoint + `authenticate`, false);
 
       req.setRequestHeader("Content-Type", "application/json");
-      req.send(JSON.stringify({ Username: username, Password: password, RecursoID: RecursoID }));
+      req.send(JSON.stringify({ Username: username, Password: password, PuestoControlID: PuestoControlID }));
 
       if (req.status == 200 && req.responseText != "true") {
         token = req.responseText;
@@ -41,7 +40,7 @@ export class LoginService {
         token = token.replace("\"", "").replace("\"", "");
       } else {
         var msjJSon = JSON.parse(req.responseText);
-        token = "ERR:" + msjJSon.Message
+        token = "ERR:" + (msjJSon.Message != undefined ? msjJSon.Message : msjJSon.message)
       }
     } catch (e) {
       token = 'ERR:' + e.message;

@@ -4,24 +4,29 @@
 // del archivo app.module.ts .
 
 import { Injectable } from '@angular/core';
-import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpResponse, HttpErrorResponse } from '@angular/common/http';
+import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Router, RouteReuseStrategy } from '@angular/router';
+import { Router } from '@angular/router';
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
+import { environment } from './../../environments/environment';
 import { AuthenticationService } from '../_services/authentication.service';
 import { LoginService } from '../_services/login.service';
-import * as jwt_decode from "jwt-decode";
+import { CommonService } from '../_services/common.service'
+import { User } from '../_model/user';
 import 'rxjs/add/operator/do';
+
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/catch';
+import 'rxjs/add/observable/throw';
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
     isRefreshingToken: boolean = false;
     tokenSubject: BehaviorSubject<string> = new BehaviorSubject<string>(null);
+    user: User;
 
-    constructor(
-        private _authenticationService: AuthenticationService,
-        private router: Router,
-        private LoginService: LoginService) { }
+    constructor(private _authenticationService: AuthenticationService, private router: Router,
+        private LoginService: LoginService, private commonService: CommonService) { }
 
     addToken(req: HttpRequest<any>, token: string): HttpRequest<any> {
         return req.clone({ setHeaders: { Authorization: 'Bearer ' + token } })
@@ -31,12 +36,17 @@ export class JwtInterceptor implements HttpInterceptor {
         let token = this._authenticationService.getCurrentToken();
         let clone: HttpRequest<any>;
         if (token) {
-            var TokenDec = this.getDecodedAccessToken(token);
-            if (!this.tokenValido(TokenDec.exp)) {
-                // renew token
-                this._authenticationService.refreshToken().subscribe(result => {
-                    token = result
-                })
+            if (environment.refreshTokenClient) {
+                if (!this.commonService.tokenValido(this.getExpDateToken())) {
+                    // renew token
+                    token = this._authenticationService.refreshToken();
+
+                    if (token == null) {
+                        alert('Se ha perdido la autenticación. Debe volver a iniciar sesión');
+                        this._authenticationService.logout();
+                        location.reload(true);
+                    }
+                }
             }
             clone = request.clone({
                 setHeaders: {
@@ -53,62 +63,49 @@ export class JwtInterceptor implements HttpInterceptor {
                 }
             });
         }
+
+        //console.info('req.headers =', request.headers, ';');
+        return next.handle(clone)
+            .map((event: HttpEvent<any>) => {
+                if (event instanceof HttpResponse && event.type == 4 && event.status == 200)
+                    this._authenticationService.updateTokenByRequest(event.body);
+                return event;
+                // if (event instanceof HttpResponse && ~~(event.status / 100) > 3) {
+                //     console.info('HttpResponse::event =', event, ';');
+                // } else console.info('event =', event, ';');
+                // return event;
+            })
+            // .catch((err: any, caught) => {
+            //     if (err instanceof HttpErrorResponse) {
+            //         if (err.status === 403) {
+            //             console.info('err.error =', err.error, ';');
+            //         }
+            //         return Observable.throw(err);
+            //     }
+            // });
+
         return next.handle(clone);
-
-        // ORIGINAL
-        // let currentUser = this.authenticationService.currentUserValue;
-        // if (currentUser && currentUser.token) {
-        //     var TokenDec = this.getDecodedAccessToken(currentUser.token);
-        //     if (!this.tokenValido(TokenDec.exp)) {
-        //         var token = this.LoginService.autenticateUser(currentUser.username, currentUser.password, currentUser.recursoID);
-        //         if (token.indexOf('ERR') != -1)
-        //             this.router.navigate(['/login']);
-        //         currentUser.token = token;
-        //     }
-
-        //     request = request.clone({
-        //         setHeaders: {
-        //             Authorization: `Bearer ${currentUser.token}`
-        //         }
-        //     });
-        // }
-
-        // OK
-        //return next.handle(request);
-
-        // return next.handle(this.addToken(request, this.authenticationService.getAuthToken()))
-        // .catch(error => {
-        //     if (error instanceof HttpErrorResponse) {
-        //         switch ((<HttpErrorResponse>error).status) {
-        //             case 400:
-        //                 return this.handle400Error(error);
-        //             case 401:
-        //                 return this.handle401Error(request, next);
-        //         }
-        //     } else {
-        //         return Observable.throw(error);
-        //     }
-        // });
-
-        //});
     }
 
+    getExpDateToken() {
+        this.user = this._authenticationService.currentUserValue;
 
-    tokenValido(exp: number): boolean {
-        var bOk = true;
+        // Onbtiene tiempo de duarción del token
+        var diffMs = (this.user.tokenDateExpirationServer.valueOf() - this.user.tokenDateGenerationServer.valueOf()); // milliseconds
+        var TokenDurationServer = Math.round(diffMs / 1000); // seconds
 
-        var current_time = new Date().getTime() / 1000;
-        if (current_time > exp)
-            bOk = false;
+        // Calcula diferencia entre genración del server y cliente
+        var diffMs = (this.user.tokenDateGenerationClient.valueOf() - this.user.tokenDateGenerationServer.valueOf()); // milliseconds
+        var TokenDifGeneration = Math.round(diffMs / 1000); // seconds
 
-        return bOk;
+        // A la fecha de generación del token del cliente, le agrega el tiempo de duración y resta diferencia entre server - cliente - 5 min
+        // Agrega tiempo de duración
+        let tokenDateGenerationClient = new Date(this.user.tokenDateGenerationClient);
+        let expDate = tokenDateGenerationClient.setSeconds(TokenDurationServer);
+        // Resta diferencia + 5 minutos
+        expDate = tokenDateGenerationClient.setSeconds(-(TokenDifGeneration + 300));
+
+        return expDate;
     }
-    getDecodedAccessToken(token: string): any {
-        try {
-            return jwt_decode(token);
-        }
-        catch (Error) {
-            return null;
-        }
-    }
+
 }

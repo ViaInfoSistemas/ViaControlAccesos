@@ -1,0 +1,21 @@
+.mat-standard-chip {
+    padding: 25px 35px !important;
+    cursor: pointer;
+}
+
+.mat-chip-list-wrapper {
+    display: block !important;
+}
+
+.mat-chip {
+    color: white;
+}
+
+h2 {
+    color: #3F51B5;
+}
+
+.divChip {
+    display: grid;
+    justify-content: center;
+}

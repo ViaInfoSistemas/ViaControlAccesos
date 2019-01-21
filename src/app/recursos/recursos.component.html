@@ -1,0 +1,11 @@
+<div class="divChip">
+  <mat-chip-list>
+    <h2>Recurso {{recursoSelected}}</h2>
+    <mat-chip *ngFor="let recurso of recursosData" [ngStyle]="{'background-color': recurso.Descripcion === recursoSelected ? 'green' : '#3F51B5' }"
+      (click)="recursoSelect(recurso)">
+      {{recurso.Descripcion}}
+    </mat-chip>
+  </mat-chip-list>
+</div>
+
+{{error}}

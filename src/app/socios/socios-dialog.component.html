@@ -1,7 +1,11 @@
-<h1 mat-dialog-title>Registrar ingreso para el Socio {{D_SOCIO}}</h1>
-<div mat-dialog-content>
-  <p>Especifique el tipo de ingreso:</p>
+<h1 mat-dialog-title>{{D_SOCIO}}</h1>
+
+<div class="recurso">
+  <app-recursos></app-recursos>
 </div>
+
+<div style="clear: both"></div>
+
 <div style="text-align: center;">
   <button mat-raised-button color="primary" (click)="Ingreso('C')" [disabled]="loading">
     <i class="material-icons" style="font-size: 0.8in">payment</i>
@@ -17,7 +21,7 @@
 </div>
 
 <div style="text-align: center">
-  <mat-spinner style="margin:0 auto;" mode="indeterminate" [diameter]="30" *ngIf="loading"></mat-spinner>  
+  <mat-spinner style="margin:0 auto;" mode="indeterminate" [diameter]="30" *ngIf="loading"></mat-spinner>
   <mat-error>&nbsp;{{msg}}</mat-error>
 </div>
 

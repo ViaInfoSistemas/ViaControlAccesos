@@ -129,6 +129,8 @@ export class SociosComponent implements OnInit {
   }
 
   toDate(date) {
+    if (date == null)
+      return '';
     let dateN = parseInt(date.substr(6));
     const today = new Date(dateN);
     const day = today.getDate();

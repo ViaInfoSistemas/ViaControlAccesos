@@ -1,7 +1,9 @@
 import { Component, OnInit, Input, ElementRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SociosService } from '../_services/socios.service'
+import { AuthenticationService } from '../_services/authentication.service'
 import { APIDataModel } from '../_model/interface';
+import { User } from '../_model/user';
 
 @Component({
   selector: 'app-acceso',
@@ -17,18 +19,25 @@ export class AccesoComponent implements OnInit {
   descripcion = '';    
   params;
   backColor = '#82E0AA';
-  icon = ''; iconColor = ''; ImgSocio = '';
+  icon = ''; iconColor = ''; ImgSocio = ''; user: User;
 
-  constructor(private route: ActivatedRoute,
-     private router: Router,
-     private SociosServices: SociosService) { }
+  constructor(private route: ActivatedRoute, private router: Router, private SociosServices: SociosService
+    , private authenticationService: AuthenticationService) { 
+      this.user = authenticationService.currentUserValue;
+    }
 
   ngOnInit() {
     const C_ACCE = this.route.snapshot.paramMap.get('C_ACCE');
     const Msj = this.route.snapshot.paramMap.get('Msj');
-    const Recurso = this.route.snapshot.paramMap.get('Recurso');
+    //const Recurso = this.route.snapshot.paramMap.get('Recurso');
+    const Recurso = this.user.recurso;
     const N_SOCIO = this.route.snapshot.paramMap.get('N_SOCIO');
     const D_SOCIO = this.route.snapshot.paramMap.get('D_SOCIO');
+
+    // let audio = new Audio();
+    // audio.src = "../../../assets/sounds/008522530_prev.mp3";
+    // audio.load();
+    // audio.play();
 
     this.n_socio = N_SOCIO;
     this.socio = D_SOCIO;
